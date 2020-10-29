@@ -42,6 +42,7 @@ $ mysql_username=YOUR_USERNAME mysql_password=YOUR_PASSWORD mysql_host=localhost
     mysql_host=localhost
     mysql_schema=YOUR_DB_NAME
 ```
+3. Press F5 to run VSCode Debugger
 # Group Members
 
 > 1118007 - Daniel Christianto  
