@@ -1,17 +1,13 @@
 package customers
 
 import (
-	"github.com/rvalessandro/go-bookstore_users-api/datasources/mysql"
-	"github.com/rvalessandro/go-bookstore_users-api/utils/errors"
-	"github.com/rvalessandro/go-bookstore_users-api/utils/mysql_util"
+	"github.com/rvalessandro/mf-backend/datasources/mysql"
+	"github.com/rvalessandro/mf-backend/utils/errors"
+	"github.com/rvalessandro/mf-backend/utils/mysql_util"
 )
 
 const (
 	queryGetCustomer = "SELECT id, name, email, address, created_at, updated_at FROM users WHERE id=?"
-)
-
-var (
-	usersDB = make(map[int64]*Customer)
 )
 
 func (user *Customer) Get() *errors.RestErr {

@@ -2,30 +2,31 @@ package customers
 
 import (
 	"strings"
+	"time"
 
-	"github.com/rvalessandro/go-bookstore_users-api/utils/errors"
+	"github.com/rvalessandro/mf-backend/utils/errors"
 )
 
 type Customer struct {
-	ID        int64  `json:"id"`
-	Name      string `json:"name"`
-	Email     string `json:"email"`
-	Password  string `json:"password"`
-	Address   string `json:"address"`
-	CreatedAt string `json:"created_at"`
-	UpdatedAt string `json:"updated_at"`
+	ID        int64     `json:"id"`
+	Name      string    `json:"name"`
+	Email     string    `json:"email"`
+	Password  string    `json:"password"`
+	Address   string    `json:"address"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
-func (user *Customer) Validate() *errors.RestErr {
-	user.Name = strings.TrimSpace(strings.ToLower(user.Name))
+func (customer *Customer) Validate() *errors.RestErr {
+	customer.Name = strings.TrimSpace(strings.ToLower(customer.Name))
 
-	user.Email = strings.TrimSpace(strings.ToLower(user.Email))
-	if user.Email == "" {
+	customer.Email = strings.TrimSpace(strings.ToLower(customer.Email))
+	if customer.Email == "" {
 		return errors.NewErrBadRequest("Email must not be empty")
 	}
 
-	user.Password = strings.TrimSpace(user.Password)
-	if user.Password == "" {
+	customer.Password = strings.TrimSpace(customer.Password)
+	if customer.Password == "" {
 		return errors.NewErrBadRequest("Password must not be empty")
 	}
 

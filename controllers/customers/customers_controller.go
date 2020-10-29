@@ -5,8 +5,8 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/rvalessandro/go-bookstore_users-api/services"
-	"github.com/rvalessandro/go-bookstore_users-api/utils/errors"
+	"github.com/rvalessandro/mf-backend/services"
+	"github.com/rvalessandro/mf-backend/utils/errors"
 )
 
 func getCustomerID(customerIDParam string) (int64, *errors.RestErr) {

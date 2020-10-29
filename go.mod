@@ -1,4 +1,4 @@
-module github.com/rvalessandro/go-bookstore_users-api
+module github.com/rvalessandro/mf-backend
 
 go 1.15
 
