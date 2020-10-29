@@ -2,10 +2,10 @@
 
 # New Features!
 
-> 1118007 - Daniel Christianto
-> 1118011 - Hanjaya Suryalim
-> 1118021 - Michelle Natasha Irawan
-> 1118023 - Daniel Alexander
+> 1118007 - Daniel Christianto  
+> 1118011 - Hanjaya Suryalim  
+> 1118021 - Michelle Natasha Irawan  
+> 1118023 - Daniel Alexander  
 > 1118036 - Raffi Verrel Alessandro
 
 ### Tech
