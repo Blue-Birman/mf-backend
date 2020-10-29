@@ -10,10 +10,10 @@ import (
 )
 
 const (
-	mysqlUsersUsername = "mysql_users_username"
-	mysqlUsersPassword = "mysql_users_password"
-	mysqlUsersHost     = "mysql_users_host"
-	mysqlUsersSchema   = "mysql_users_schema"
+	mysqlUsersUsername = "mysql_username"
+	mysqlUsersPassword = "mysql_password"
+	mysqlUsersHost     = "mysql_host"
+	mysqlUsersSchema   = "mysql_schema"
 )
 
 var (
