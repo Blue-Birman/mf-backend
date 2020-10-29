@@ -1,13 +1,5 @@
 # Millenial Fashion
 
-# Team Members
-
-> 1118007 - Daniel Christianto  
-> 1118011 - Hanjaya Suryalim  
-> 1118021 - Michelle Natasha Irawan  
-> 1118023 - Daniel Alexander  
-> 1118036 - Raffi Verrel Alessandro
-
 ### Tech
 
 Millenial Fashion uses a number of open source projects to work properly:
@@ -44,8 +36,17 @@ $ mysql_username=YOUR_USERNAME mysql_password=YOUR_PASSWORD mysql_host=localhost
     }
 ```
 2. Create .env file in project 
+```
     mysql_username=YOUR_USERNAME
     mysql_password=YOUR_PASSWORD
     mysql_host=localhost
     mysql_schema=YOUR_DB_NAME
 ```
+# Group Members
+
+> 1118007 - Daniel Christianto  
+> 1118011 - Hanjaya Suryalim  
+> 1118021 - Michelle Natasha Irawan  
+> 1118023 - Daniel Alexander  
+> 1118036 - Raffi Verrel Alessandro
+
