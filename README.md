@@ -1,6 +1,6 @@
 # Millenial Fashion
 
-# New Features!
+# Team Members
 
 > 1118007 - Daniel Christianto  
 > 1118011 - Hanjaya Suryalim  
