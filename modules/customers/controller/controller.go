@@ -2,24 +2,14 @@ package customers
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/rvalessandro/mf-backend/modules/customers/services"
-	"github.com/rvalessandro/mf-backend/utils/errors"
+	"github.com/rvalessandro/mf-backend/utils/parser"
 )
 
-func getCustomerID(customerIDParam string) (int64, *errors.RestErr) {
-	customerID, customerErr := strconv.ParseInt(customerIDParam, 10, 64)
-	if customerErr != nil {
-		return 0, errors.NewErrBadRequest("invalid customer id")
-	}
-
-	return customerID, nil
-}
-
 func Get(c *gin.Context) {
-	customerID, idErr := getCustomerID(c.Param("customer_id"))
+	customerID, idErr := parser.ParseID(c.Param("customer_id"))
 	if idErr != nil {
 		c.JSON(idErr.Status, idErr)
 		return

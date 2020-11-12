@@ -1,7 +1,11 @@
 package app
 
-import "github.com/rvalessandro/mf-backend/modules/customers/presentation"
+import (
+	customerPresentation "github.com/rvalessandro/mf-backend/modules/customers/presentation"
+	productPresentation "github.com/rvalessandro/mf-backend/modules/products/presentation"
+)
 
 func mapURLs() {
-	presentation.MapURLs(*router)
+	customerPresentation.MapURLs(*router)
+	productPresentation.MapURLs(*router)
 }
