@@ -7,6 +7,6 @@ var (
 )
 
 func StartApplication() {
-	mapUrls()
+	mapURLs()
 	router.Run(":8080")
 }

@@ -1,7 +1,7 @@
 package app
 
-import "github.com/rvalessandro/mf-backend/controllers/customers"
+import "github.com/rvalessandro/mf-backend/modules/customers/presentation"
 
-func mapUrls() {
-	router.GET("/customers/:customer_id", customers.Get)
+func mapURLs() {
+	presentation.MapURLs(*router)
 }

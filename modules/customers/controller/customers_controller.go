@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/rvalessandro/mf-backend/services"
+	"github.com/rvalessandro/mf-backend/modules/customers/services"
 	"github.com/rvalessandro/mf-backend/utils/errors"
 )
 
