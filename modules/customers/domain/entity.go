@@ -21,4 +21,5 @@ type CreateCustomerParams struct {
 	Password  string
 	Address   string
 	CreatedAt time.Time
+	UpdatedAt time.Time
 }

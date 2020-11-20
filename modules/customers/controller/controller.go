@@ -1,6 +1,7 @@
 package customers
 
 import (
+	"github.com/rvalessandro/mf-backend/modules/customers/domain"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,7 @@ func Find(c *gin.Context) {
 	customers, err := services.FindCustomer()
 	if err != nil {
 		c.JSON(err.Status, err)
+		return
 	}
 
 	c.JSON(http.StatusOK, customers)
@@ -30,5 +32,22 @@ func Get(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, customer)
+	c.JSON(http.StatusOK, customer)
+}
+
+func Create(c *gin.Context) {
+	var customerParam domain.CreateCustomerParams
+	err := c.ShouldBindJSON(&customerParam)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	newCustomer, createErr := services.CreateCustomer(customerParam)
+	if createErr != nil {
+		c.JSON(http.StatusInternalServerError, createErr)
+		return
+	}
+
+	c.JSON(http.StatusCreated, newCustomer)
 }

@@ -27,7 +27,7 @@ var (
 
 func init() {
 	var err error
-	datasource := fmt.Sprintf("%s:%s@tcp(%s)/%s",
+	datasource := fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=true",
 		username, password, host, schema,
 	)
 	Client, err = sql.Open("mysql", datasource)

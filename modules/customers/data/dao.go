@@ -10,13 +10,12 @@ import (
 
 const (
 	queryFindCustomer   = `SELECT id, name, email, address, created_at, updated_at FROM customers`
-	queryGetCustomer    = `SELECT id, name, email, address, created_at, updated_at from customers where id=$1;`
+	queryGetCustomer    = `SELECT id, name, email, address, created_at, updated_at from customers where id=?;`
 	queryCreateCustomer = `
 		INSERT INTO customers (name, email, password, address, created_at)
 		VALUES (
-			$1, $2, $3, $4, $5
-		)
-		RETURNING id, name, email, password, address, created_at, updated_at`
+			?, ?, ?, ?, ?
+		)`
 	queryDeleteCustomer = `DELETE FROM customers WHERE id=$1`
 )
 
@@ -65,4 +64,21 @@ func Get(customerID int64) (*domain.Customer, *errors.RestErr) {
 	}
 
 	return &customer, nil
+}
+
+func Create(customerParam domain.CreateCustomerParams) (*domain.Customer, *errors.RestErr) {
+	stmt, err := mysql.Client.Prepare(queryCreateCustomer)
+	if err != nil {
+		return nil, errors.NewErrInternalServer(err.Error())
+	}
+	defer stmt.Close()
+
+	queryRes, err := stmt.Exec(customerParam.Name, customerParam.Email, customerParam.Password, customerParam.Address, customerParam.CreatedAt)
+	if err != nil {
+		return nil, mysql_util.ParseError(err)
+	}
+
+	newID, err := queryRes.LastInsertId()
+
+	return Get(newID)
 }
