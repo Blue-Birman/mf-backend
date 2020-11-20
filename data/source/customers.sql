@@ -1,11 +1,11 @@
 CREATE TABLE customers (
-    id SERIAL PRIMARY KEY,
-    name varchar(255) NOT NULL,
-    email varchar (255) NOT NULL,
-    password varchar (255) NOT NULL,
-    address varchar (255) NOT NULL,
-    created_at date NOT NULL,
-    updated_at date
+       id BIGINT AUTO_INCREMENT PRIMARY KEY,
+       name varchar(255) NOT NULL,
+       email varchar (255) NOT NULL UNIQUE ,
+       password varchar (255) NOT NULL,
+       address varchar (255) NOT NULL,
+       created_at date NOT NULL,
+       updated_at date
 );
 
 -- name: GetCustomer :one
