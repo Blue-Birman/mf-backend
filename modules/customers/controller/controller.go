@@ -8,6 +8,15 @@ import (
 	"github.com/rvalessandro/mf-backend/utils/parser"
 )
 
+func Find(c *gin.Context) {
+	customers, err := services.FindCustomer()
+	if err != nil {
+		c.JSON(err.Status, err)
+	}
+
+	c.JSON(http.StatusOK, customers)
+}
+
 func Get(c *gin.Context) {
 	customerID, idErr := parser.ParseID(c.Param("customer_id"))
 	if idErr != nil {
@@ -15,9 +24,9 @@ func Get(c *gin.Context) {
 		return
 	}
 
-	customer, saveErr := services.GetCustomer(customerID)
-	if saveErr != nil {
-		c.JSON(saveErr.Status, saveErr)
+	customer, err := services.GetCustomer(customerID)
+	if err != nil {
+		c.JSON(err.Status, err)
 		return
 	}
 

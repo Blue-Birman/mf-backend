@@ -8,8 +8,8 @@ import (
 )
 
 func mapURLs() {
-	customerPresentation.MapURLs(*router)
-	productPresentation.MapURLs(*router)
-	transactionPresentation.MapURLs(*router)
-	wishlistPresentation.MapURLs(*router)
+	customerPresentation.MapURLs(router)
+	productPresentation.MapURLs(router)
+	transactionPresentation.MapURLs(router)
+	wishlistPresentation.MapURLs(router)
 }

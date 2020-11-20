@@ -5,6 +5,7 @@ import (
 	customerController "github.com/rvalessandro/mf-backend/modules/customers/controller"
 )
 
-func MapURLs(router gin.Engine) {
+func MapURLs(router *gin.Engine) {
+	router.GET("/customers", customerController.Find)
 	router.GET("/customers/:customer_id", customerController.Get)
 }
