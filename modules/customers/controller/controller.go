@@ -51,3 +51,20 @@ func Create(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, newCustomer)
 }
+
+func Delete(c *gin.Context) {
+	customerID, err := parser.ParseID(c.Param("customer_id"))
+	if err != nil {
+		c.JSON(err.Status, err)
+		return
+	}
+
+	var customer *domain.Customer
+	customer, err = services.DeleteCustomer(customerID)
+	if err != nil {
+		c.JSON(err.Status, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, customer)
+}

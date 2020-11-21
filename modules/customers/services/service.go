@@ -37,3 +37,17 @@ func CreateCustomer(customerParam domain.CreateCustomerParams) (*domain.Customer
 
 	return customer, nil
 }
+
+func DeleteCustomer(customerID int64) (*domain.Customer, *errors.RestErr) {
+	customer, err := data.Get(customerID)
+	if err != nil {
+		return nil, err
+	}
+
+	err = data.Delete(customerID)
+	if err != nil {
+		return nil, err
+	}
+
+	return customer, err
+}

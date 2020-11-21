@@ -82,3 +82,18 @@ func Create(customerParam domain.CreateCustomerParams) (*domain.Customer, *error
 
 	return Get(newID)
 }
+
+func Delete(customerID int64) *errors.RestErr {
+	stmt, err := mysql.Client.Prepare(queryDeleteCustomer)
+	if err != nil {
+		return errors.NewErrInternalServer(err.Error())
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(customerID)
+	if err != nil {
+		return errors.NewErrInternalServer(err.Error())
+	}
+
+	return nil
+}
