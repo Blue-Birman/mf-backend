@@ -16,3 +16,12 @@ type Customer struct {
 	CreatedAt time.Time
 	UpdatedAt sql.NullTime
 }
+
+type Product struct {
+	ID        int64
+	Name      string
+	ImageUrl  string
+	Price     string
+	CreatedAt time.Time
+	UpdatedAt sql.NullTime
+}

@@ -2,9 +2,13 @@ package presentation
 
 import (
 	"github.com/gin-gonic/gin"
-	productController "github.com/rvalessandro/mf-backend/modules/products/controller"
+	customerController "github.com/rvalessandro/mf-backend/modules/products/controller"
 )
 
 func MapURLs(router *gin.Engine) {
-	router.GET("/products/:product_id", productController.Get)
+	router.GET("/product", customerController.Find)
+	router.GET("/product/:customer_id", customerController.Get)
+	router.POST("/product/", customerController.Create)
+	router.PUT("/product/:customer_id", customerController.Update)
+	router.DELETE("/product/:customer_id", customerController.Delete)
 }

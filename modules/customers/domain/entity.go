@@ -16,10 +16,10 @@ type Customer struct {
 }
 
 type CreateCustomerParams struct {
-	Name      string
-	Email     string
-	Password  string
-	Address   string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	Name      string       `json:"name"`
+	Email     string       `json:"email"`
+	Password  string       `json:"password"`
+	Address   string       `json:"address"`
+	CreatedAt time.Time    `json:"created_at"`
+	UpdatedAt sql.NullTime `json:"updated_at"`
 }

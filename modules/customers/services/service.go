@@ -28,7 +28,7 @@ func GetCustomer(customerID int64) (*domain.Customer, *errors.RestErr) {
 func CreateCustomer(customerParam domain.CreateCustomerParams) (*domain.Customer, *errors.RestErr) {
 	currentTime := time.Now()
 	customerParam.CreatedAt = currentTime
-	customerParam.UpdatedAt = currentTime
+	customerParam.UpdatedAt.Time = currentTime
 
 	customer, err := data.Create(customerParam)
 	if err != nil {
@@ -39,7 +39,7 @@ func CreateCustomer(customerParam domain.CreateCustomerParams) (*domain.Customer
 }
 
 func UpdateCustomer(id int64, customerParam domain.CreateCustomerParams) (*domain.Customer, *errors.RestErr) {
-	customerParam.UpdatedAt = time.Now()
+	customerParam.UpdatedAt.Time = time.Now()
 
 	customer, err := data.Update(id, customerParam)
 	if err != nil {
