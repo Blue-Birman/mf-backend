@@ -38,6 +38,17 @@ func CreateCustomer(customerParam domain.CreateCustomerParams) (*domain.Customer
 	return customer, nil
 }
 
+func UpdateCustomer(id int64, customerParam domain.CreateCustomerParams) (*domain.Customer, *errors.RestErr) {
+	customerParam.UpdatedAt = time.Now()
+
+	customer, err := data.Update(id, customerParam)
+	if err != nil {
+		return nil, err
+	}
+
+	return customer, nil
+}
+
 func DeleteCustomer(customerID int64) (*domain.Customer, *errors.RestErr) {
 	customer, err := data.Get(customerID)
 	if err != nil {

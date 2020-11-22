@@ -52,6 +52,29 @@ func Create(c *gin.Context) {
 	c.JSON(http.StatusCreated, newCustomer)
 }
 
+func Update(c *gin.Context) {
+	customerID, err := parser.ParseID(c.Param("customer_id"))
+	if err != nil {
+		c.JSON(err.Status, err)
+		return
+	}
+
+	var customerParam domain.CreateCustomerParams
+	bindErr := c.ShouldBindJSON(&customerParam)
+	if bindErr != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	customer, updateErr := services.UpdateCustomer(customerID, customerParam)
+	if updateErr != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, customer)
+}
+
 func Delete(c *gin.Context) {
 	customerID, err := parser.ParseID(c.Param("customer_id"))
 	if err != nil {

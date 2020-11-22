@@ -16,6 +16,7 @@ const (
 		VALUES (
 			?, ?, ?, ?, ?
 		)`
+	queryUpdateCustomer = `UPDATE customers SET name=?, email=?, password=?, address=?, updated_at=? WHERE id=?`
 	queryDeleteCustomer = `DELETE FROM customers WHERE id=$1`
 )
 
@@ -81,6 +82,21 @@ func Create(customerParam domain.CreateCustomerParams) (*domain.Customer, *error
 	newID, err := queryRes.LastInsertId()
 
 	return Get(newID)
+}
+
+func Update(id int64, customerParam domain.CreateCustomerParams) (*domain.Customer, *errors.RestErr) {
+	stmt, err := mysql.Client.Prepare(queryUpdateCustomer)
+	if err != nil {
+		return nil, errors.NewErrInternalServer(err.Error())
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(customerParam.Name, customerParam.Email, customerParam.Password, customerParam.Address, customerParam.UpdatedAt, id)
+	if err != nil {
+		return nil, errors.NewErrInternalServer(err.Error())
+	}
+
+	return Get(id)
 }
 
 func Delete(customerID int64) *errors.RestErr {

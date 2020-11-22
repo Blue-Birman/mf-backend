@@ -5,6 +5,7 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"time"
 )
 
@@ -106,4 +107,29 @@ func (q *Queries) GetCustomer(ctx context.Context, id int64) (Customer, error) {
 		&i.UpdatedAt,
 	)
 	return i, err
+}
+
+const updateCustomer = `-- name: UpdateCustomer :exec
+UPDATE customers SET name=$1, email=$2, password=$3, address=$4, updated_at=$5 WHERE id=$6
+`
+
+type UpdateCustomerParams struct {
+	Name      string
+	Email     string
+	Password  string
+	Address   string
+	UpdatedAt sql.NullTime
+	ID        int64
+}
+
+func (q *Queries) UpdateCustomer(ctx context.Context, arg UpdateCustomerParams) error {
+	_, err := q.db.ExecContext(ctx, updateCustomer,
+		arg.Name,
+		arg.Email,
+		arg.Password,
+		arg.Address,
+		arg.UpdatedAt,
+		arg.ID,
+	)
+	return err
 }

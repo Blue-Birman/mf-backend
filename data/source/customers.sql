@@ -1,5 +1,5 @@
 CREATE TABLE customers (
-       id BIGINT AUTO_INCREMENT PRIMARY KEY,
+       id BIGSERIAL PRIMARY KEY,
        name varchar(255) NOT NULL,
        email varchar (255) NOT NULL UNIQUE ,
        password varchar (255) NOT NULL,
@@ -20,6 +20,9 @@ INSERT INTO customers (name, email, password, address, created_at)
         $1, $2, $3, $4, $5
     )
     RETURNING *;
+
+-- name: UpdateCustomer :exec
+UPDATE customers SET name=$1, email=$2, password=$3, address=$4, updated_at=$5 WHERE id=$6;
 
 -- name: DeleteCustomer :exec
 DELETE FROM customers WHERE id=$1;
