@@ -18,10 +18,18 @@ type Customer struct {
 }
 
 type Product struct {
-	ID        int64
+	ID        int32
 	Name      string
 	ImageUrl  string
 	Price     string
 	CreatedAt time.Time
 	UpdatedAt sql.NullTime
+}
+
+type Transaction struct {
+	ID         int32
+	CustomerID int32
+	Date       time.Time
+	CreatedAt  time.Time
+	UpdatedAt  sql.NullTime
 }
