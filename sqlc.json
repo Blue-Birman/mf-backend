@@ -1,9 +1,0 @@
-{
-  "version": "1",
-  "packages": [{
-    "schema": "data/source",
-    "queries": "data/source",
-    "name": "main",
-    "path": "data/result"
-  }]
-}
