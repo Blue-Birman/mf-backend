@@ -63,6 +63,9 @@ func Find() ([]domain.Product, *errors.RestErr) {
 	return results, nil
 }
 
+/**
+ * TODO Generate product list
+ */
 func Get(id int64) (*domain.Product, *errors.RestErr) {
 	product := domain.Product{}
 	stmt, err := mysql.Client.Prepare(queryGetProduct)
