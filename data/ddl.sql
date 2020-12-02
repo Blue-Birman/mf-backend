@@ -14,13 +14,14 @@ create table customers
 
 create table products
 (
-    id         int auto_increment
+    id          int auto_increment
         primary key,
-    name       varchar(255) not null,
-    image_url  varchar(255) not null,
-    price      varchar(255) not null,
-    created_at date         not null,
-    updated_at date         null
+    name        varchar(255) not null,
+    description text,
+    image_url   varchar(255) not null,
+    price       varchar(255) not null,
+    created_at  date         not null,
+    updated_at  date         null
 );
 
 create table transactions

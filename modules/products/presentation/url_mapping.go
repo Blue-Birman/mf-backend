@@ -6,9 +6,9 @@ import (
 )
 
 func MapURLs(router *gin.Engine) {
-	router.GET("/product", productController.Find)
-	router.GET("/product/:product_id", productController.Get)
-	router.POST("/product/", productController.Create)
-	router.PUT("/product/:product_id", productController.Update)
-	router.DELETE("/product/:product_id", productController.Delete)
+	router.GET("/products", productController.Find)
+	router.GET("/products/:product_id", productController.Get)
+	router.POST("/products", productController.Create)
+	router.PUT("/products/:product_id", productController.Update)
+	router.DELETE("/products/:product_id", productController.Delete)
 }

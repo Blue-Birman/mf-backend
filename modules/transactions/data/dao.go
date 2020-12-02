@@ -3,6 +3,7 @@ package data
 import (
 	"fmt"
 	"github.com/rvalessandro/mf-backend/datasources/mysql"
+	domain2 "github.com/rvalessandro/mf-backend/modules/products/domain"
 	"github.com/rvalessandro/mf-backend/modules/transactions/domain"
 	"github.com/rvalessandro/mf-backend/utils/errors"
 	"github.com/rvalessandro/mf-backend/utils/mysql_util"
@@ -18,7 +19,11 @@ const (
 	`
 	queryCreateTransaction = `
 		INSERT INTO transactions (customer_id, date, created_at, updated_at)
-		VALUES (?,?,?,?);
+		VALUES (?, ?, ?, ?);
+	`
+	queryCreateTransactionProducts = `
+		INSERT INTO transaction_products (transaction_id, product_id, qty, created_at, updated_at) 
+		VALUES (?, ?, ?, ?, ?);
 	`
 	queryUpdateTransaction = `
 		UPDATE transactions
@@ -70,7 +75,7 @@ func Get(id int64) (*domain.Transaction, *errors.RestErr) {
 	defer stmt.Close()
 
 	result := stmt.QueryRow(id)
-	err = result.Scan(&transaction.ID, &transaction.Date, &transaction.CreatedAt, &transaction.UpdatedAt)
+	err = result.Scan(&transaction.ID, &transaction.CustomerID, &transaction.Date, &transaction.CreatedAt, &transaction.UpdatedAt)
 	if err != nil {
 		return nil, mysql_util.ParseError(err)
 	}
@@ -85,12 +90,29 @@ func Create(TransactionParam domain.CreateTransactionParams) (*domain.Transactio
 	}
 	defer stmt.Close()
 
-	queryRes, err := stmt.Exec(TransactionParam.Date, TransactionParam.CreatedAt)
+	queryRes, err := stmt.Exec(TransactionParam.CustomerID, TransactionParam.Date, TransactionParam.CreatedAt, TransactionParam.UpdatedAt)
 	if err != nil {
 		return nil, mysql_util.ParseError(err)
 	}
-
 	newID, err := queryRes.LastInsertId()
+
+	/**
+	 * Insert Transaction Products
+	 */
+	prodStmt, prodErr := mysql.Client.Prepare(queryCreateTransactionProducts)
+	if prodErr != nil {
+		return nil, errors.NewErrInternalServer(prodErr.Error())
+	}
+	defer prodStmt.Close()
+
+	for _, product := range TransactionParam.Products {
+		product.TransactionID = newID
+		_, prodErr := prodStmt.Exec(product.TransactionID, product.ProductID, product.Qty, TransactionParam.CreatedAt, TransactionParam.UpdatedAt)
+		if prodErr != nil {
+			fmt.Println(prodErr)
+			return nil, errors.NewErrInternalServer(prodErr.Error())
+		}
+	}
 
 	return Get(newID)
 }

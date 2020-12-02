@@ -1,12 +1,12 @@
 package transactions
 
 import (
-	"github.com/rvalessandro/mf-backend/modules/transactions/domain"
-	"net/http"
-
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/rvalessandro/mf-backend/modules/transactions/domain"
 	"github.com/rvalessandro/mf-backend/modules/transactions/services"
 	"github.com/rvalessandro/mf-backend/utils/parser"
+	"net/http"
 )
 
 func Find(c *gin.Context) {
@@ -36,14 +36,15 @@ func Get(c *gin.Context) {
 }
 
 func Create(c *gin.Context) {
-	var productParam domain.CreateTransactionParams
-	err := c.ShouldBindJSON(&productParam)
+	var transactionParam domain.CreateTransactionParams
+	err := c.ShouldBindJSON(&transactionParam)
 	if err != nil {
+		fmt.Println(err)
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
 
-	newTransaction, createErr := services.CreateTransaction(productParam)
+	newTransaction, createErr := services.CreateTransaction(transactionParam)
 	if createErr != nil {
 		c.JSON(http.StatusInternalServerError, createErr)
 		return

@@ -28,7 +28,7 @@ func GetProduct(productID int64) (*domain.Product, *errors.RestErr) {
 func CreateProduct(productParam domain.CreateProductParams) (*domain.Product, *errors.RestErr) {
 	currentTime := time.Now()
 	productParam.CreatedAt = currentTime
-	productParam.UpdatedAt.Time = currentTime
+	productParam.UpdatedAt = currentTime
 
 	product, err := data.Create(productParam)
 	if err != nil {
@@ -39,7 +39,7 @@ func CreateProduct(productParam domain.CreateProductParams) (*domain.Product, *e
 }
 
 func UpdateProduct(id int64, productParam domain.CreateProductParams) (*domain.Product, *errors.RestErr) {
-	productParam.UpdatedAt.Time = time.Now()
+	productParam.UpdatedAt = time.Now()
 
 	product, err := data.Update(id, productParam)
 	if err != nil {

@@ -6,9 +6,9 @@ import (
 )
 
 func MapURLs(router *gin.Engine) {
-	router.GET("/transaction", transactionController.Find)
-	router.GET("/transaction/:transaction_id", transactionController.Get)
-	router.POST("/transaction/", transactionController.Create)
-	router.PUT("/transaction/:transaction_id", transactionController.Update)
-	router.DELETE("/transaction/:transaction_id", transactionController.Delete)
+	router.GET("/transactions", transactionController.Find)
+	router.GET("/transactions/:transaction_id", transactionController.Get)
+	router.POST("/transactions", transactionController.Create)
+	router.PUT("/transactions/:transaction_id", transactionController.Update)
+	router.DELETE("/transactions/:transaction_id", transactionController.Delete)
 }

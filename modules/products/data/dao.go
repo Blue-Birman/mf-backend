@@ -17,9 +17,9 @@ const (
 		LIMIT 1;
 	`
 	queryCreateProduct = `
-		INSERT INTO products (name, image_url, price, created_at, updated_at)
+		INSERT INTO products (name, description, image_url, price, created_at, updated_at)
 		VALUES (
-			?, ?, ?, ?, ?
+			?, ?, ?, ?, ?, ?
 		)
 	`
 	queryUpdateProduct = `
@@ -81,14 +81,16 @@ func Get(id int64) (*domain.Product, *errors.RestErr) {
 }
 
 func Create(ProductParam domain.CreateProductParams) (*domain.Product, *errors.RestErr) {
+	fmt.Println("entered DAO")
 	stmt, err := mysql.Client.Prepare(queryCreateProduct)
 	if err != nil {
 		return nil, errors.NewErrInternalServer(err.Error())
 	}
 	defer stmt.Close()
 
-	queryRes, err := stmt.Exec(ProductParam.Name, ProductParam.ImageURL, ProductParam.Price, ProductParam.CreatedAt)
+	queryRes, err := stmt.Exec(ProductParam.Name, ProductParam.Description, ProductParam.ImageURL, ProductParam.Price, ProductParam.CreatedAt, ProductParam.UpdatedAt)
 	if err != nil {
+		fmt.Println(err.Error())
 		return nil, mysql_util.ParseError(err)
 	}
 
