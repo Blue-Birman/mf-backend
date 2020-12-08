@@ -36,7 +36,7 @@ const (
 	`
 	queryDeleteTransaction = `DELETE FROM transactions WHERE id=?`
 
-	queryFindTransactionProductIDs = `SELECT product_id FROM transaction_products WHERE transaction_id=?`
+	queryFindTransactionProductIDs = `SELECT product_id, qty FROM transaction_products WHERE transaction_id=?`
 )
 
 func Find() ([]domain.Transaction, *errors.RestErr) {
@@ -169,7 +169,7 @@ func Delete(id int64) *errors.RestErr {
 /**
  *
  */
-func FindTransactionProducts(transactionID int64) ([]productDomain.Product, *errors.RestErr) {
+func FindTransactionProducts(transactionID int64) ([]productDomain.TransactionProduct, *errors.RestErr) {
 	findProductIDsStmt, err := mysql.Client.Prepare(queryFindTransactionProductIDs)
 	if err != nil {
 		return nil, errors.NewErrInternalServer(err.Error())
@@ -181,23 +181,28 @@ func FindTransactionProducts(transactionID int64) ([]productDomain.Product, *err
 		return nil, errors.NewErrInternalServer(err.Error())
 	}
 
-	productIDs := make([]int64, 0)
+	transactionProducts := make([]productDomain.TransactionProduct, 0)
 	for rows.Next() {
-		var productID int64
-		err := rows.Scan(&productID)
+		var transactionProduct productDomain.TransactionProduct
+		err := rows.Scan(&transactionProduct.ID, &transactionProduct.Qty)
 		if err != nil {
 			return nil, errors.NewErrInternalServer(err.Error())
 		}
-		productIDs = append(productIDs, productID)
+		transactionProducts = append(transactionProducts, transactionProduct)
 	}
 
-	products := make([]productDomain.Product, 0)
-	for _, productID := range productIDs {
-		product, err := productDAO.Get(productID)
+	products := make([]productDomain.TransactionProduct, 0)
+	for _, transactionProduct := range transactionProducts {
+		product, err := productDAO.Get(transactionProduct.ID)
+		transactionProduct.Name = product.Name
+		transactionProduct.Description = product.Name
+		transactionProduct.ImageURL = product.Name
+		transactionProduct.Price = product.Price
+		transactionProduct.Total = transactionProduct.Price * int64(transactionProduct.Qty)
 		if err != nil {
 			return nil, err
 		}
-		products = append(products, *product)
+		products = append(products, transactionProduct)
 	}
 
 	return products, nil

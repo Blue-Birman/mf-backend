@@ -13,6 +13,13 @@ func FindTransaction() ([]domain.Transaction, *errors.RestErr) {
 		return nil, err
 	}
 
+	for i, transaction := range transactions {
+		transactionClone := transaction
+		transactionClone.CalculateTotal()
+
+		transactions[i] = transactionClone
+	}
+
 	return transactions, nil
 }
 
@@ -21,6 +28,8 @@ func GetTransaction(transactionID int64) (*domain.Transaction, *errors.RestErr) 
 	if err != nil {
 		return nil, err
 	}
+
+	transaction.CalculateTotal()
 
 	return transaction, nil
 }
