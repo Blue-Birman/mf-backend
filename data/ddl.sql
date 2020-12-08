@@ -1,6 +1,7 @@
 create table if not exists categories
 (
-    id         int          not null,
+    id         int auto_increment
+        primary key,
     name       varchar(255) not null,
     created_at date         not null,
     updated_at date         not null,
