@@ -20,7 +20,7 @@ func Find(c *gin.Context) {
 }
 
 func Get(c *gin.Context) {
-	productID, idErr := parser.ParseID(c.Param("product_id"))
+	productID, idErr := parser.ParseID(c.Param("transaction_id"))
 	if idErr != nil {
 		c.JSON(idErr.Status, idErr)
 		return

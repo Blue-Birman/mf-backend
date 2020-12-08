@@ -3,7 +3,8 @@ package data
 import (
 	"fmt"
 	"github.com/rvalessandro/mf-backend/datasources/mysql"
-	domain2 "github.com/rvalessandro/mf-backend/modules/products/domain"
+	productDAO "github.com/rvalessandro/mf-backend/modules/products/data"
+	productDomain "github.com/rvalessandro/mf-backend/modules/products/domain"
 	"github.com/rvalessandro/mf-backend/modules/transactions/domain"
 	"github.com/rvalessandro/mf-backend/utils/errors"
 	"github.com/rvalessandro/mf-backend/utils/mysql_util"
@@ -34,6 +35,8 @@ const (
 		WHERE id=?
 	`
 	queryDeleteTransaction = `DELETE FROM transactions WHERE id=?`
+
+	queryFindTransactionProductIDs = `SELECT product_id FROM transaction_products WHERE transaction_id=?`
 )
 
 func Find() ([]domain.Transaction, *errors.RestErr) {
@@ -52,7 +55,7 @@ func Find() ([]domain.Transaction, *errors.RestErr) {
 	results := make([]domain.Transaction, 0)
 	for rows.Next() {
 		var transaction domain.Transaction
-		err := rows.Scan(&transaction.ID, &transaction.Date, &transaction.CreatedAt, &transaction.UpdatedAt)
+		err := rows.Scan(&transaction.ID, &transaction.CustomerID, &transaction.Date, &transaction.CreatedAt, &transaction.UpdatedAt)
 		if err != nil {
 			return nil, errors.NewErrInternalServer(err.Error())
 		}
@@ -79,6 +82,13 @@ func Get(id int64) (*domain.Transaction, *errors.RestErr) {
 	if err != nil {
 		return nil, mysql_util.ParseError(err)
 	}
+
+	products, productsErr := FindTransactionProducts(id)
+	if productsErr != nil {
+		return nil, productsErr
+	}
+
+	transaction.Products = products
 
 	return &transaction, nil
 }
@@ -145,4 +155,41 @@ func Delete(id int64) *errors.RestErr {
 	}
 
 	return nil
+}
+
+/**
+ *
+ */
+func FindTransactionProducts(transactionID int64) ([]productDomain.Product, *errors.RestErr) {
+	findProductIDsStmt, err := mysql.Client.Prepare(queryFindTransactionProductIDs)
+	if err != nil {
+		return nil, errors.NewErrInternalServer(err.Error())
+	}
+	defer findProductIDsStmt.Close()
+
+	rows, err := findProductIDsStmt.Query(transactionID)
+	if err != nil {
+		return nil, errors.NewErrInternalServer(err.Error())
+	}
+
+	productIDs := make([]int64, 0)
+	for rows.Next() {
+		var productID int64
+		err := rows.Scan(&productID)
+		if err != nil {
+			return nil, errors.NewErrInternalServer(err.Error())
+		}
+		productIDs = append(productIDs, productID)
+	}
+
+	products := make([]productDomain.Product, 0)
+	for _, productID := range productIDs {
+		product, err := productDAO.Get(productID)
+		if err != nil {
+			return nil, err
+		}
+		products = append(products, *product)
+	}
+
+	return products, nil
 }
