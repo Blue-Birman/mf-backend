@@ -85,7 +85,6 @@ func Get(id int64) (*domain.Product, *errors.RestErr) {
 }
 
 func Create(ProductParam domain.CreateProductParams) (*domain.Product, *errors.RestErr) {
-	fmt.Println("entered DAO")
 	stmt, err := mysql.Client.Prepare(queryCreateProduct)
 	if err != nil {
 		return nil, errors.NewErrInternalServer(err.Error())
@@ -94,7 +93,6 @@ func Create(ProductParam domain.CreateProductParams) (*domain.Product, *errors.R
 
 	queryRes, err := stmt.Exec(ProductParam.Name, ProductParam.Description, ProductParam.ImageURL, ProductParam.Price, ProductParam.CreatedAt, ProductParam.UpdatedAt)
 	if err != nil {
-		fmt.Println(err.Error())
 		return nil, mysql_util.ParseError(err)
 	}
 

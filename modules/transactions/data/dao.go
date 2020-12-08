@@ -128,7 +128,6 @@ func Create(TransactionParam domain.CreateTransactionParams) (*domain.Transactio
 		product.TransactionID = newID
 		_, prodErr := prodStmt.Exec(product.TransactionID, product.ProductID, product.Qty, TransactionParam.CreatedAt, TransactionParam.UpdatedAt)
 		if prodErr != nil {
-			fmt.Println(prodErr)
 			return nil, errors.NewErrInternalServer(prodErr.Error())
 		}
 	}

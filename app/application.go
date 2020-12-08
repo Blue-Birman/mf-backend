@@ -21,12 +21,13 @@ func StartApplication() {
 }
 
 func generateEngine() (*gin.Engine, error) {
-	if router == nil {
-		lock.Lock()
-		defer lock.Unlock()
-		router = gin.Default()
-	} else {
+	if router != nil {
 		return nil, errors.New("engine already exist")
 	}
+
+	lock.Lock()
+	defer lock.Unlock()
+	router = gin.Default()
+
 	return router, nil
 }
