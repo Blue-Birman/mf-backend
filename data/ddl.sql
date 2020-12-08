@@ -1,3 +1,16 @@
+create table if not exists categories
+(
+    id         int          not null,
+    name       varchar(255) not null,
+    created_at date         not null,
+    updated_at date         not null,
+    constraint category_id_uindex
+        unique (id)
+);
+
+alter table categories
+    add primary key (id);
+
 create table if not exists customers
 (
     id         int auto_increment
@@ -16,12 +29,16 @@ create table if not exists products
 (
     id          int auto_increment
         primary key,
+    category_id int          not null,
     name        varchar(255) not null,
     description varchar(255) null,
     image_url   varchar(255) not null,
+    preview_url varchar(255) null,
     price       varchar(255) not null,
     created_at  date         not null,
-    updated_at  date         null
+    updated_at  date         null,
+    constraint products_category_id_fk
+        foreign key (category_id) references categories (id)
 );
 
 create table if not exists transactions
