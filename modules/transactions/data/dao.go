@@ -66,6 +66,15 @@ func Find() ([]domain.Transaction, *errors.RestErr) {
 		return nil, errors.NewErrNotFound(fmt.Sprintf("No transactions found"))
 	}
 
+	for i, transaction := range results {
+		products, productsErr := FindTransactionProducts(transaction.ID)
+		if productsErr != nil {
+			return nil, productsErr
+		}
+
+		results[i].Products = products
+	}
+
 	return results, nil
 }
 
