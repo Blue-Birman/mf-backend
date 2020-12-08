@@ -9,9 +9,9 @@ import (
 )
 
 const (
-	queryFindProduct = `SELECT id, name, image_url, price, created_at, updated_at FROM products;`
+	queryFindProduct = `SELECT id, name, description, image_url, price, created_at, updated_at FROM products;`
 	queryGetProduct  = `
-		SELECT id, name, image_url, price, created_at, updated_at
+		SELECT id, name, description, image_url, price, created_at, updated_at
 		FROM products
 		WHERE id = ?
 		LIMIT 1;
@@ -25,6 +25,7 @@ const (
 	queryUpdateProduct = `
 		UPDATE products
 		SET name=?,
+			description=?,
 			image_url=?,
 			price=?,
 			updated_at=?
@@ -49,7 +50,7 @@ func Find() ([]domain.Product, *errors.RestErr) {
 	results := make([]domain.Product, 0)
 	for rows.Next() {
 		var product domain.Product
-		err := rows.Scan(&product.ID, &product.Name, &product.ImageURL, &product.Price, &product.CreatedAt, &product.UpdatedAt)
+		err := rows.Scan(&product.ID, &product.Name, &product.Description, &product.ImageURL, &product.Price, &product.CreatedAt, &product.UpdatedAt)
 		if err != nil {
 			return nil, errors.NewErrInternalServer(err.Error())
 		}
@@ -75,7 +76,7 @@ func Get(id int64) (*domain.Product, *errors.RestErr) {
 	defer stmt.Close()
 
 	result := stmt.QueryRow(id)
-	err = result.Scan(&product.ID, &product.Name, &product.ImageURL, &product.Price, &product.CreatedAt, &product.UpdatedAt)
+	err = result.Scan(&product.ID, &product.Name, &product.Description, &product.ImageURL, &product.Price, &product.CreatedAt, &product.UpdatedAt)
 	if err != nil {
 		return nil, mysql_util.ParseError(err)
 	}
@@ -109,7 +110,7 @@ func Update(id int64, ProductParam domain.CreateProductParams) (*domain.Product,
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(ProductParam.Name, ProductParam.ImageURL, ProductParam.Price, ProductParam.UpdatedAt, id)
+	_, err = stmt.Exec(ProductParam.Name, ProductParam.Description, ProductParam.ImageURL, ProductParam.Price, ProductParam.UpdatedAt, id)
 	if err != nil {
 		return nil, errors.NewErrInternalServer(err.Error())
 	}
