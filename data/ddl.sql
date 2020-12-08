@@ -1,4 +1,4 @@
-create table customers
+create table if not exists customers
 (
     id         int auto_increment
         primary key,
@@ -12,19 +12,19 @@ create table customers
         unique (email)
 );
 
-create table products
+create table if not exists products
 (
     id          int auto_increment
         primary key,
     name        varchar(255) not null,
-    description text,
+    description varchar(255) null,
     image_url   varchar(255) not null,
     price       varchar(255) not null,
     created_at  date         not null,
     updated_at  date         null
 );
 
-create table transactions
+create table if not exists transactions
 (
     id          int auto_increment
         primary key,
@@ -34,12 +34,14 @@ create table transactions
     updated_at  date null
 );
 
-create table transaction_products
+create table if not exists transaction_products
 (
     id             int auto_increment,
-    transaction_id int null,
-    product_id     int null,
-    qty            int null,
+    transaction_id int  null,
+    product_id     int  null,
+    qty            int  null,
+    created_at     date not null,
+    updated_at     date not null,
     constraint transaction_products_id_uindex
         unique (id),
     constraint transaction_products_products_id_fk
@@ -50,5 +52,4 @@ create table transaction_products
 
 alter table transaction_products
     add primary key (id);
-
 
