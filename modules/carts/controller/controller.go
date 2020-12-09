@@ -13,6 +13,7 @@ import (
 func Get(c *gin.Context) {
 	customerID, idErr := parser.ParseID(c.Param("customer_id"))
 	fmt.Println("Geet")
+	fmt.Println(customerID)
 	if idErr != nil {
 		c.JSON(idErr.Status, idErr)
 		return

@@ -1,6 +1,8 @@
 package data
 
 import (
+	"fmt"
+
 	"github.com/rvalessandro/mf-backend/datasources/mysql"
 	"github.com/rvalessandro/mf-backend/modules/carts/domain"
 	"github.com/rvalessandro/mf-backend/utils/errors"
@@ -8,10 +10,10 @@ import (
 )
 
 const (
-	queryGetCart              = `SELECT customer_id, product_id, created_at, updated_at from categories where customer_id=? and product_id=?;`
-	queryGetCartsByCustomerID = `SELECT customer_id, product_id, created_at, updated_at from categories where customer_id=?;`
+	queryGetCart              = `SELECT customer_id, product_id, created_at, updated_at from carts where customer_id=? and product_id=?;`
+	queryGetCartsByCustomerID = `SELECT customer_id, product_id, created_at, updated_at from carts where customer_id=?;`
 	queryCreateCart           = `
-		INSERT INTO categories (customer_id, product_id, created_at, updated_at)
+		INSERT INTO carts (customer_id, product_id, created_at, updated_at)
 		VALUES (
 			?, ?, ?, ?
 		)`
@@ -27,6 +29,7 @@ func Find(customerID int64) (*domain.Cart, *errors.RestErr) {
 	defer stmt.Close()
 
 	result := stmt.QueryRow(customerID)
+	fmt.Println(result)
 	err = result.Scan(&cart.CustomerID, &cart.ProductID, &cart.CreatedAt, &cart.UpdatedAt)
 	if err != nil {
 		return nil, mysql_util.ParseError(err)
