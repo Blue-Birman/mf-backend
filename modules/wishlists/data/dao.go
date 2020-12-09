@@ -10,19 +10,19 @@ import (
 )
 
 const (
-	queryGetCart              = `SELECT customer_id, product_id, created_at, updated_at from wishlists where customer_id=? and product_id=?;`
-	queryGetCartsByCustomerID = `SELECT customer_id, product_id, created_at, updated_at from wishlists where customer_id=?;`
-	queryCreateCart           = `
+	queryGetWishlist              = `SELECT customer_id, product_id, created_at, updated_at from wishlists where customer_id=? and product_id=?;`
+	queryGetWishlistsByCustomerID = `SELECT customer_id, product_id, created_at, updated_at from wishlists where customer_id=?;`
+	queryCreateWishlist           = `
 		INSERT INTO wishlists (customer_id, product_id, created_at, updated_at)
 		VALUES (
 			?, ?, ?, ?
 		)`
-	queryDeleteCart = `DELETE FROM wishlists WHERE customer_id=? AND product_id=?`
+	queryDeleteWishlist = `DELETE FROM wishlists WHERE customer_id=? AND product_id=?`
 )
 
-// func Find(customerID int64) (domain.Cart, *errors.RestErr) {
-// 	wishlist := domain.Cart{}
-// 	stmt, err := mysql.Client.Prepare(queryGetCartsByCustomerID)
+// func Find(customerID int64) (domain.Wishlist, *errors.RestErr) {
+// 	wishlist := domain.Wishlist{}
+// 	stmt, err := mysql.Client.Prepare(queryGetWishlistsByCustomerID)
 // 	if err != nil {
 // 		return nil, errors.NewErrInternalServer(err.Error())
 // 	}
@@ -38,8 +38,8 @@ const (
 // 	return &wishlist, nil
 // }
 
-func Find(customerID int64) ([]domain.Cart, *errors.RestErr) {
-	stmt, err := mysql.Client.Prepare(queryGetCartsByCustomerID)
+func Find(customerID int64) ([]domain.Wishlist, *errors.RestErr) {
+	stmt, err := mysql.Client.Prepare(queryGetWishlistsByCustomerID)
 	if err != nil {
 		return nil, errors.NewErrInternalServer(err.Error())
 	}
@@ -51,9 +51,9 @@ func Find(customerID int64) ([]domain.Cart, *errors.RestErr) {
 	}
 	defer rows.Close()
 
-	results := make([]domain.Cart, 0)
+	results := make([]domain.Wishlist, 0)
 	for rows.Next() {
-		var wishlist domain.Cart
+		var wishlist domain.Wishlist
 		err = rows.Scan(&wishlist.CustomerID, &wishlist.ProductID, &wishlist.CreatedAt, &wishlist.UpdatedAt)
 		if err != nil {
 			return nil, errors.NewErrInternalServer(err.Error())
@@ -68,9 +68,9 @@ func Find(customerID int64) ([]domain.Cart, *errors.RestErr) {
 	return results, nil
 }
 
-func Get(customerID int64, productID int64) (*domain.Cart, *errors.RestErr) {
-	wishlist := domain.Cart{}
-	stmt, err := mysql.Client.Prepare(queryGetCart)
+func Get(customerID int64, productID int64) (*domain.Wishlist, *errors.RestErr) {
+	wishlist := domain.Wishlist{}
+	stmt, err := mysql.Client.Prepare(queryGetWishlist)
 	if err != nil {
 		return nil, errors.NewErrInternalServer(err.Error())
 	}
@@ -85,8 +85,8 @@ func Get(customerID int64, productID int64) (*domain.Cart, *errors.RestErr) {
 	return &wishlist, nil
 }
 
-func Create(wishlistParam domain.CreateCartParams) (*domain.Cart, *errors.RestErr) {
-	stmt, err := mysql.Client.Prepare(queryCreateCart)
+func Create(wishlistParam domain.CreateWishlistParams) (*domain.Wishlist, *errors.RestErr) {
+	stmt, err := mysql.Client.Prepare(queryCreateWishlist)
 	if err != nil {
 		return nil, errors.NewErrInternalServer(err.Error())
 	}
@@ -105,7 +105,7 @@ func Create(wishlistParam domain.CreateCartParams) (*domain.Cart, *errors.RestEr
 }
 
 func Delete(customerID int64, productID int64) *errors.RestErr {
-	stmt, err := mysql.Client.Prepare(queryDeleteCart)
+	stmt, err := mysql.Client.Prepare(queryDeleteWishlist)
 	if err != nil {
 		return errors.NewErrInternalServer(err.Error())
 	}

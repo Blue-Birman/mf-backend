@@ -26,59 +26,59 @@ VALUES
 /**
   * PRODUCTS
  */
-INSERT INTO millenial_fashion.products
+INSERT INTO millenialfashion.products
         (id, category_id, name, description, image_url, preview_url, price, created_at,
         updated_at)
 VALUES
         (1, 1, 'White Clothes', 'White clothes with elastic fiber, appropiate for hard sporting, will absorb sweat fast',
                 'assets/product/set_1.png', null, '1000000', '2020-12-08', '2020-12-08');
-INSERT INTO millenial_fashion.products
+INSERT INTO millenialfashion.products
         (id, category_id, name, description, image_url, preview_url, price, created_at,
         updated_at)
 VALUES
         (2, 1, 'Blue Clothes', 'blue clothes with elastic fiber, appropiate for hard sporting, will absorb sweat fast',
                 'assets/product/set_2.png', null, '1500000', '2020-12-08', '2020-12-08');
-INSERT INTO millenial_fashion.products
+INSERT INTO millenialfashion.products
         (id, category_id, name, description, image_url, preview_url, price, created_at,
         updated_at)
 VALUES
         (3, 1, 'Blue Mask', 'Blue mask with thick fiber, will always block dust and virus from outside in',
                 'assets/product/set_3.png', null, '1250000', '2020-12-08', '2020-12-08');
-INSERT INTO millenial_fashion.products
+INSERT INTO millenialfashion.products
         (id, category_id, name, description, image_url, preview_url, price, created_at,
         updated_at)
 VALUES
         (4, 1, 'Purple Mask', 'Purple mask with thick fiber, will always block dust and virus from outside in',
                 'assets/product/set_4.png', null, '2000000', '2020-12-08', '2020-12-08');
-INSERT INTO millenial_fashion.products
+INSERT INTO millenialfashion.products
         (id, category_id, name, description, image_url, preview_url, price, created_at,
         updated_at)
 VALUES
         (5, 2, 'White fiber cloth',
                 'White clothes with thick fiber, appropiate for soft sporting, will absorb heat and keep you warm',
                 'assets/product/set_5.png', null, '2500000', '2020-12-08', '2020-12-08');
-INSERT INTO millenial_fashion.products
+INSERT INTO millenialfashion.products
         (id, category_id, name, description, image_url, preview_url, price, created_at,
         updated_at)
 VALUES
         (6, 2, 'Blue fiber cloth',
                 'blue clothes with thick fiber, appropiate for soft sporting, will absorb heat and keep you warm',
                 'assets/product/set_6.png', null, '2500000', '2020-12-08', '2020-12-08');
-INSERT INTO millenial_fashion.products
+INSERT INTO millenialfashion.products
         (id, category_id, name, description, image_url, preview_url, price, created_at,
         updated_at)
 VALUES
         (7, 2, 'Red White fiber cloth',
                 'Pattern clothes with thick fiber, appropiate for soft sporting, will absorb heat and keep you warm',
                 'assets/product/set_7.png', null, '2500000', '2020-12-08', '2020-12-08');
-INSERT INTO millenial_fashion.products
+INSERT INTO millenialfashion.products
         (id, category_id, name, description, image_url, preview_url, price, created_at,
         updated_at)
 VALUES
         (8, 2, 'Blue Tiger fiber cloth',
                 'Tiger Pattern clothes with thick fiber, appropiate for soft sporting, will absorb heat and keep you warm',
                 'assets/product/set_8.png', null, '2500000', '2020-12-08', '2020-12-08');
-INSERT INTO millenial_fashion.products
+INSERT INTO millenialfashion.products
         (id, category_id, name, description, image_url, preview_url, price, created_at,
         updated_at)
 VALUES
