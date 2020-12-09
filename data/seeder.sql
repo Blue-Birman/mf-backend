@@ -2,8 +2,7 @@
   * CUSTOMERS
  */
 INSERT INTO `customers` (`
-id`,
-`name
+id`,`name
 `, `email`, `password`, `address`, `created_at`, `updated_at`)
 VALUES
 (1, 'Alessandro', 'rvalessandro@gmail.com', 'rv123', 'Bali no 2', '2020-12-08', '2020-12-08'),
@@ -15,11 +14,11 @@ VALUES
 /**
   * CATEGORIES
  */
-INSERT INTO millenial_fashion.categories
+INSERT INTO categories
         (id, name, created_at, updated_at)
 VALUES
         (1, 'Men', '2020-12-08', '2020-12-08');
-INSERT INTO millenial_fashion.categories
+INSERT INTO categories
         (id, name, created_at, updated_at)
 VALUES
         (2, 'Women', '2020-12-08', '2020-12-08');

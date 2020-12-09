@@ -6,6 +6,7 @@ import (
 	customerPresentation "github.com/rvalessandro/mf-backend/modules/customers/presentation"
 	productPresentation "github.com/rvalessandro/mf-backend/modules/products/presentation"
 	transactionPresentation "github.com/rvalessandro/mf-backend/modules/transactions/presentation"
+	wishlistPresentation "github.com/rvalessandro/mf-backend/modules/wishlists/presentation"
 )
 
 func mapURLs() {
@@ -14,4 +15,5 @@ func mapURLs() {
 	transactionPresentation.MapURLs(router)
 	categoryPresentation.MapURLs(router)
 	cartPresentation.MapURLs(router)
+	wishlistPresentation.MapURLs(router)
 }
