@@ -8,6 +8,7 @@ import (
 )
 
 const (
+	queryGetCart              = `SELECT customer_id, product_id, created_at, updated_at from categories where customer_id=? and product_id=?;`
 	queryGetCartsByCustomerID = `SELECT customer_id, product_id, created_at, updated_at from categories where customer_id=?;`
 	queryCreateCart           = `
 		INSERT INTO categories (customer_id, product_id, created_at, updated_at)
@@ -17,7 +18,7 @@ const (
 	queryDeleteCart = `DELETE FROM carts WHERE customer_id=$1 AND product_id=$1`
 )
 
-func Get(cartID int64) (*domain.Cart, *errors.RestErr) {
+func Find(customerID int64) (*domain.Cart, *errors.RestErr) {
 	cart := domain.Cart{}
 	stmt, err := mysql.Client.Prepare(queryGetCartsByCustomerID)
 	if err != nil {
@@ -25,7 +26,24 @@ func Get(cartID int64) (*domain.Cart, *errors.RestErr) {
 	}
 	defer stmt.Close()
 
-	result := stmt.QueryRow(cartID)
+	result := stmt.QueryRow(customerID)
+	err = result.Scan(&cart.CustomerID, &cart.ProductID, &cart.CreatedAt, &cart.UpdatedAt)
+	if err != nil {
+		return nil, mysql_util.ParseError(err)
+	}
+
+	return &cart, nil
+}
+
+func Get(customerID int64, productID int64) (*domain.Cart, *errors.RestErr) {
+	cart := domain.Cart{}
+	stmt, err := mysql.Client.Prepare(queryGetCart)
+	if err != nil {
+		return nil, errors.NewErrInternalServer(err.Error())
+	}
+	defer stmt.Close()
+
+	result := stmt.QueryRow(customerID, productID)
 	err = result.Scan(&cart.CustomerID, &cart.ProductID, &cart.CreatedAt, &cart.UpdatedAt)
 	if err != nil {
 		return nil, mysql_util.ParseError(err)
@@ -41,14 +59,14 @@ func Create(cartParam domain.CreateCartParams) (*domain.Cart, *errors.RestErr) {
 	}
 	defer stmt.Close()
 
-	queryRes, err := stmt.Exec((&cart.CustomerID, &cart.ProductID, &cart.CreatedAt, &cart.UpdatedAt)
-	if err != nil {
-		return nil, mysql_util.ParseError(err)
-	}
+	// queryRes, err := stmt.Exec(&cartParam.CustomerID, &cartParam.ProductID, &cartParam.CreatedAt, &cartParam.UpdatedAt)
+	// if err != nil {
+	// 	return nil, mysql_util.ParseError(err)
+	// }
 
-	newID, err := queryRes.LastInsertId()
+	// newID, err := queryRes.LastInsertId()
 
-	return Get(newID)
+	return Get(cartParam.CustomerID, cartParam.ProductID)
 }
 
 func Delete(customerID int64, productID int64) *errors.RestErr {

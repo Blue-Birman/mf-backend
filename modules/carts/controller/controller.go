@@ -46,14 +46,20 @@ func Create(c *gin.Context) {
 }
 
 func Delete(c *gin.Context) {
-	productID, err := parser.ParseID(c.Param("customer_id", "product_id"))
+	customerID, err := parser.ParseID(c.Param("customer_id"))
+	if err != nil {
+		c.JSON(err.Status, err)
+		return
+	}
+
+	productID, err := parser.ParseID(c.Param("product_id"))
 	if err != nil {
 		c.JSON(err.Status, err)
 		return
 	}
 
 	var product *domain.Cart
-	product, err = services.DeleteCart(productID)
+	product, err = services.DeleteCart(customerID, productID)
 	if err != nil {
 		c.JSON(err.Status, err)
 		return

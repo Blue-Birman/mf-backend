@@ -9,7 +9,7 @@ import (
 )
 
 func GetCartByCustomerID(customerID int64) (*domain.Cart, *errors.RestErr) {
-	cart, err := data.Get(customerID)
+	cart, err := data.Find(customerID)
 	if err != nil {
 		return nil, err
 	}
@@ -30,13 +30,13 @@ func CreateCart(cartParam domain.CreateCartParams) (*domain.Cart, *errors.RestEr
 	return cart, nil
 }
 
-func DeleteCart(cartID int64) (*domain.Cart, *errors.RestErr) {
-	cart, err := data.Get(cartID)
+func DeleteCart(customerID int64, productID int64) (*domain.Cart, *errors.RestErr) {
+	cart, err := data.Get(customerID, productID)
 	if err != nil {
 		return nil, err
 	}
 
-	err = data.Delete(cartID)
+	err = data.Delete(customerID, productID)
 	if err != nil {
 		return nil, err
 	}
