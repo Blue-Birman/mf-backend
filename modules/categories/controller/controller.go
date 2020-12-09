@@ -36,14 +36,14 @@ func Get(c *gin.Context) {
 }
 
 func Create(c *gin.Context) {
-	var categoryParam domain.CreateCategoryParams
+	categoryParam := domain.NewCategory()
 	err := c.ShouldBindJSON(&categoryParam)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	newCategory, createErr := services.CreateCategory(categoryParam)
+	newCategory, createErr := services.CreateCategory(*categoryParam)
 	if createErr != nil {
 		c.JSON(http.StatusInternalServerError, createErr)
 		return

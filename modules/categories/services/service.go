@@ -26,10 +26,6 @@ func GetCategory(customerID int64) (*domain.Category, *errors.RestErr) {
 }
 
 func CreateCategory(customerParam domain.CreateCategoryParams) (*domain.Category, *errors.RestErr) {
-	currentTime := time.Now()
-	customerParam.CreatedAt = currentTime
-	customerParam.UpdatedAt.Time = currentTime
-
 	customer, err := data.Create(customerParam)
 	if err != nil {
 		return nil, err
@@ -39,7 +35,7 @@ func CreateCategory(customerParam domain.CreateCategoryParams) (*domain.Category
 }
 
 func UpdateCategory(id int64, customerParam domain.CreateCategoryParams) (*domain.Category, *errors.RestErr) {
-	customerParam.UpdatedAt.Time = time.Now()
+	customerParam.UpdatedAt = time.Now()
 
 	customer, err := data.Update(id, customerParam)
 	if err != nil {

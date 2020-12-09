@@ -2,7 +2,6 @@ package data
 
 import (
 	"fmt"
-
 	"github.com/rvalessandro/mf-backend/datasources/mysql"
 	"github.com/rvalessandro/mf-backend/modules/categories/domain"
 	"github.com/rvalessandro/mf-backend/utils/errors"

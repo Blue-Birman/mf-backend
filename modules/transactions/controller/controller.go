@@ -1,7 +1,6 @@
 package transactions
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/rvalessandro/mf-backend/modules/transactions/domain"
 	"github.com/rvalessandro/mf-backend/modules/transactions/services"
@@ -39,7 +38,6 @@ func Create(c *gin.Context) {
 	var transactionParam domain.CreateTransactionParams
 	err := c.ShouldBindJSON(&transactionParam)
 	if err != nil {
-		fmt.Println(err)
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
