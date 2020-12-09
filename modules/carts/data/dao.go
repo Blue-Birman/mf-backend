@@ -17,7 +17,7 @@ const (
 		VALUES (
 			?, ?, ?, ?
 		)`
-	queryDeleteCart = `DELETE FROM carts WHERE customer_id=$1 AND product_id=$1`
+	queryDeleteCart = `DELETE FROM carts WHERE customer_id=? AND product_id=?`
 )
 
 // func Find(customerID int64) (domain.Cart, *errors.RestErr) {
