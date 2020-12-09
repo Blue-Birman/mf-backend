@@ -2,6 +2,7 @@ package app
 
 import (
 	"errors"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"sync"
 )
@@ -28,6 +29,7 @@ func generateEngine() (*gin.Engine, error) {
 	lock.Lock()
 	defer lock.Unlock()
 	router = gin.Default()
+	router.Use(cors.Default())
 
 	return router, nil
 }
