@@ -2,6 +2,7 @@ package data
 
 import (
 	"fmt"
+
 	"github.com/rvalessandro/mf-backend/datasources/mysql"
 	productDAO "github.com/rvalessandro/mf-backend/modules/products/data"
 	productDomain "github.com/rvalessandro/mf-backend/modules/products/domain"
@@ -11,7 +12,7 @@ import (
 )
 
 const (
-	queryFindTransaction = `SELECT id, customer_id, date, created_at, updated_at FROM transactions;`
+	queryFindTransaction = `SELECT id, customer_id, date, created_at, updated_at FROM transactions WHERE customer_id=?;`
 	queryGetTransaction  = `
 		SELECT id, customer_id, date, created_at, updated_at 
 		FROM transactions 
@@ -39,14 +40,14 @@ const (
 	queryFindTransactionProductIDs = `SELECT product_id, qty FROM transaction_products WHERE transaction_id=?`
 )
 
-func Find() ([]domain.Transaction, *errors.RestErr) {
+func Find(customerID int64) ([]domain.Transaction, *errors.RestErr) {
 	stmt, err := mysql.Client.Prepare(queryFindTransaction)
 	if err != nil {
 		return nil, errors.NewErrInternalServer(err.Error())
 	}
 	defer stmt.Close()
 
-	rows, err := stmt.Query()
+	rows, err := stmt.Query(customerID)
 	if err != nil {
 		return nil, errors.NewErrInternalServer(err.Error())
 	}
@@ -194,8 +195,9 @@ func FindTransactionProducts(transactionID int64) ([]productDomain.TransactionPr
 	for _, transactionProduct := range transactionProducts {
 		product, err := productDAO.Get(transactionProduct.ID)
 		transactionProduct.Name = product.Name
-		transactionProduct.Description = product.Name
-		transactionProduct.ImageURL = product.Name
+		transactionProduct.Description = product.Description
+		transactionProduct.ImageURL = product.ImageURL
+		transactionProduct.PreviewURL = product.PreviewURL
 		transactionProduct.Price = product.Price
 		transactionProduct.Total = transactionProduct.Price * int64(transactionProduct.Qty)
 		if err != nil {

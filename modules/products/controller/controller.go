@@ -1,8 +1,9 @@
 package products
 
 import (
-	"github.com/rvalessandro/mf-backend/modules/products/domain"
 	"net/http"
+
+	"github.com/rvalessandro/mf-backend/modules/products/domain"
 
 	"github.com/gin-gonic/gin"
 	"github.com/rvalessandro/mf-backend/modules/products/services"
@@ -17,6 +18,22 @@ func Find(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, products)
+}
+
+func GetByCategory(c *gin.Context) {
+	categoryID, idErr := parser.ParseID(c.Param("category_id"))
+	if idErr != nil {
+		c.JSON(idErr.Status, idErr)
+		return
+	}
+
+	product, err := services.GetProductsByCategory(categoryID)
+	if err != nil {
+		c.JSON(err.Status, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, product)
 }
 
 func Get(c *gin.Context) {

@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"time"
 
+	productDomain "github.com/rvalessandro/mf-backend/modules/products/domain"
 	"github.com/rvalessandro/mf-backend/modules/wishlists/data"
 	"github.com/rvalessandro/mf-backend/modules/wishlists/domain"
 	"github.com/rvalessandro/mf-backend/utils/errors"
 )
 
-func GetWishlistByCustomerID(customerID int64) ([]domain.Wishlist, *errors.RestErr) {
+func GetWishlistByCustomerID(customerID int64) ([]productDomain.Product, *errors.RestErr) {
 	wishlists, err := data.Find(customerID)
 	fmt.Println("masuk")
 	if err != nil {

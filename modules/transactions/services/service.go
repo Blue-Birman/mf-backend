@@ -1,14 +1,15 @@
 package services
 
 import (
+	"time"
+
 	"github.com/rvalessandro/mf-backend/modules/transactions/data"
 	"github.com/rvalessandro/mf-backend/modules/transactions/domain"
 	"github.com/rvalessandro/mf-backend/utils/errors"
-	"time"
 )
 
-func FindTransaction() ([]domain.Transaction, *errors.RestErr) {
-	transactions, err := data.Find()
+func FindTransaction(customerID int64) ([]domain.Transaction, *errors.RestErr) {
+	transactions, err := data.Find(customerID)
 	if err != nil {
 		return nil, err
 	}

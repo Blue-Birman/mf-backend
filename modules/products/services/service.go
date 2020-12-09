@@ -1,14 +1,24 @@
 package services
 
 import (
+	"time"
+
 	"github.com/rvalessandro/mf-backend/modules/products/data"
 	"github.com/rvalessandro/mf-backend/modules/products/domain"
 	"github.com/rvalessandro/mf-backend/utils/errors"
-	"time"
 )
 
 func FindProduct() ([]domain.Product, *errors.RestErr) {
 	products, err := data.Find()
+	if err != nil {
+		return nil, err
+	}
+
+	return products, nil
+}
+
+func GetProductsByCategory(categoryID int64) ([]domain.Product, *errors.RestErr) {
+	products, err := data.GetByCategory(categoryID)
 	if err != nil {
 		return nil, err
 	}

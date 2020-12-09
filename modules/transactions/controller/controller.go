@@ -1,15 +1,22 @@
 package transactions
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/rvalessandro/mf-backend/modules/transactions/domain"
 	"github.com/rvalessandro/mf-backend/modules/transactions/services"
 	"github.com/rvalessandro/mf-backend/utils/parser"
-	"net/http"
 )
 
 func Find(c *gin.Context) {
-	products, err := services.FindTransaction()
+	customerID, idErr := parser.ParseID(c.Param("customer_id"))
+	if idErr != nil {
+		c.JSON(idErr.Status, idErr)
+		return
+	}
+
+	products, err := services.FindTransaction(customerID)
 	if err != nil {
 		c.JSON(err.Status, err)
 		return

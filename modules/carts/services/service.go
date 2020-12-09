@@ -6,10 +6,11 @@ import (
 
 	"github.com/rvalessandro/mf-backend/modules/carts/data"
 	"github.com/rvalessandro/mf-backend/modules/carts/domain"
+	productDomain "github.com/rvalessandro/mf-backend/modules/products/domain"
 	"github.com/rvalessandro/mf-backend/utils/errors"
 )
 
-func GetCartByCustomerID(customerID int64) ([]domain.Cart, *errors.RestErr) {
+func GetCartByCustomerID(customerID int64) ([]productDomain.Product, *errors.RestErr) {
 	carts, err := data.Find(customerID)
 	fmt.Println("masuk")
 	if err != nil {

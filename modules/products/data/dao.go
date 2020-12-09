@@ -2,6 +2,7 @@ package data
 
 import (
 	"fmt"
+
 	"github.com/rvalessandro/mf-backend/datasources/mysql"
 	"github.com/rvalessandro/mf-backend/modules/products/domain"
 	"github.com/rvalessandro/mf-backend/utils/errors"
@@ -9,15 +10,20 @@ import (
 )
 
 const (
-	queryFindProduct = `SELECT id, name, description, image_url, price, created_at, updated_at FROM products;`
+	queryFindProduct = `SELECT id, category_id, name, description, image_url, preview_url, price, created_at, updated_at FROM products;`
 	queryGetProduct  = `
-		SELECT id, name, description, image_url, price, created_at, updated_at
+		SELECT id, category_id, name, description, image_url, preview_url, price, created_at, updated_at
 		FROM products
 		WHERE id = ?
 		LIMIT 1;
 	`
+	queryGetProductsByCategory = `
+		SELECT id, category_id, name, description, image_url, preview_url, price, created_at, updated_at
+		FROM products
+		WHERE category_id = ?;
+	`
 	queryCreateProduct = `
-		INSERT INTO products (name, description, image_url, price, created_at, updated_at)
+		INSERT INTO products (category_id, name, description, image_url, price, created_at, updated_at)
 		VALUES (
 			?, ?, ?, ?, ?, ?
 		)
@@ -50,7 +56,7 @@ func Find() ([]domain.Product, *errors.RestErr) {
 	results := make([]domain.Product, 0)
 	for rows.Next() {
 		var product domain.Product
-		err := rows.Scan(&product.ID, &product.Name, &product.Description, &product.ImageURL, &product.Price, &product.CreatedAt, &product.UpdatedAt)
+		err := rows.Scan(&product.ID, &product.CategoryID, &product.Name, &product.Description, &product.ImageURL, &product.PreviewURL, &product.Price, &product.CreatedAt, &product.UpdatedAt)
 		if err != nil {
 			return nil, errors.NewErrInternalServer(err.Error())
 		}
@@ -76,12 +82,42 @@ func Get(id int64) (*domain.Product, *errors.RestErr) {
 	defer stmt.Close()
 
 	result := stmt.QueryRow(id)
-	err = result.Scan(&product.ID, &product.Name, &product.Description, &product.ImageURL, &product.Price, &product.CreatedAt, &product.UpdatedAt)
+	err = result.Scan(&product.ID, &product.CategoryID, &product.Name, &product.Description, &product.ImageURL, &product.PreviewURL, &product.Price, &product.CreatedAt, &product.UpdatedAt)
 	if err != nil {
 		return nil, mysql_util.ParseError(err)
 	}
 
 	return &product, nil
+}
+
+func GetByCategory(category_id int64) ([]domain.Product, *errors.RestErr) {
+	stmt, err := mysql.Client.Prepare(queryGetProductsByCategory)
+	if err != nil {
+		return nil, errors.NewErrInternalServer(err.Error())
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(category_id)
+	if err != nil {
+		return nil, errors.NewErrInternalServer(err.Error())
+	}
+	defer rows.Close()
+
+	results := make([]domain.Product, 0)
+	for rows.Next() {
+		var product domain.Product
+		err := rows.Scan(&product.ID, &product.CategoryID, &product.Name, &product.Description, &product.ImageURL, &product.PreviewURL, &product.Price, &product.CreatedAt, &product.UpdatedAt)
+		if err != nil {
+			return nil, errors.NewErrInternalServer(err.Error())
+		}
+		results = append(results, product)
+	}
+
+	if len(results) == 0 {
+		return nil, errors.NewErrNotFound(fmt.Sprintf("No products found"))
+	}
+
+	return results, nil
 }
 
 func Create(ProductParam domain.CreateProductParams) (*domain.Product, *errors.RestErr) {

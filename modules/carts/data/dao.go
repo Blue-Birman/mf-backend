@@ -5,6 +5,8 @@ import (
 
 	"github.com/rvalessandro/mf-backend/datasources/mysql"
 	"github.com/rvalessandro/mf-backend/modules/carts/domain"
+	productDAO "github.com/rvalessandro/mf-backend/modules/products/data"
+	productDomain "github.com/rvalessandro/mf-backend/modules/products/domain"
 	"github.com/rvalessandro/mf-backend/utils/errors"
 	"github.com/rvalessandro/mf-backend/utils/mysql_util"
 )
@@ -38,7 +40,7 @@ const (
 // 	return &cart, nil
 // }
 
-func Find(customerID int64) ([]domain.Cart, *errors.RestErr) {
+func Find(customerID int64) ([]productDomain.Product, *errors.RestErr) {
 	stmt, err := mysql.Client.Prepare(queryGetCartsByCustomerID)
 	if err != nil {
 		return nil, errors.NewErrInternalServer(err.Error())
@@ -61,11 +63,19 @@ func Find(customerID int64) ([]domain.Cart, *errors.RestErr) {
 		results = append(results, cart)
 	}
 
+	products := make([]productDomain.Product, 0)
+	for _, transactionProduct := range results {
+		product, err := productDAO.Get(transactionProduct.ProductID)
+		if err != nil {
+			return nil, err
+		}
+		products = append(products, *product)
+	}
 	if len(results) == 0 {
 		return nil, errors.NewErrNotFound(fmt.Sprintf("No carts found"))
 	}
 
-	return results, nil
+	return products, nil
 }
 
 func Get(customerID int64, productID int64) (*domain.Cart, *errors.RestErr) {
@@ -91,8 +101,6 @@ func Create(cartParam domain.CreateCartParams) (*domain.Cart, *errors.RestErr) {
 		return nil, errors.NewErrInternalServer(err.Error())
 	}
 	defer stmt.Close()
-
-	fmt.Println(cartParam.ProductID)
 
 	stmt.Exec(&cartParam.CustomerID, &cartParam.ProductID, &cartParam.CreatedAt, &cartParam.UpdatedAt)
 

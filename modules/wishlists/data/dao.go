@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"github.com/rvalessandro/mf-backend/datasources/mysql"
+	productDAO "github.com/rvalessandro/mf-backend/modules/products/data"
+	productDomain "github.com/rvalessandro/mf-backend/modules/products/domain"
 	"github.com/rvalessandro/mf-backend/modules/wishlists/domain"
 	"github.com/rvalessandro/mf-backend/utils/errors"
 	"github.com/rvalessandro/mf-backend/utils/mysql_util"
@@ -38,7 +40,7 @@ const (
 // 	return &wishlist, nil
 // }
 
-func Find(customerID int64) ([]domain.Wishlist, *errors.RestErr) {
+func Find(customerID int64) ([]productDomain.Product, *errors.RestErr) {
 	stmt, err := mysql.Client.Prepare(queryGetWishlistsByCustomerID)
 	if err != nil {
 		return nil, errors.NewErrInternalServer(err.Error())
@@ -61,11 +63,20 @@ func Find(customerID int64) ([]domain.Wishlist, *errors.RestErr) {
 		results = append(results, wishlist)
 	}
 
+	products := make([]productDomain.Product, 0)
+	for _, transactionProduct := range results {
+		product, err := productDAO.Get(transactionProduct.ProductID)
+		fmt.Println(transactionProduct.ProductID)
+		if err != nil {
+			return nil, err
+		}
+		products = append(products, *product)
+	}
 	if len(results) == 0 {
 		return nil, errors.NewErrNotFound(fmt.Sprintf("No wishlists found"))
 	}
 
-	return results, nil
+	return products, nil
 }
 
 func Get(customerID int64, productID int64) (*domain.Wishlist, *errors.RestErr) {
