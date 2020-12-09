@@ -20,22 +20,52 @@ const (
 	queryDeleteCart = `DELETE FROM carts WHERE customer_id=$1 AND product_id=$1`
 )
 
-func Find(customerID int64) (*domain.Cart, *errors.RestErr) {
-	cart := domain.Cart{}
+// func Find(customerID int64) (domain.Cart, *errors.RestErr) {
+// 	cart := domain.Cart{}
+// 	stmt, err := mysql.Client.Prepare(queryGetCartsByCustomerID)
+// 	if err != nil {
+// 		return nil, errors.NewErrInternalServer(err.Error())
+// 	}
+// 	defer stmt.Close()
+
+// 	result := stmt.QueryRow(customerID)
+// 	fmt.Println(result)
+// 	err = result.Scan(&cart.CustomerID, &cart.ProductID, &cart.CreatedAt, &cart.UpdatedAt)
+// 	if err != nil {
+// 		return nil, mysql_util.ParseError(err)
+// 	}
+
+// 	return &cart, nil
+// }
+
+func Find(customerID int64) ([]domain.Cart, *errors.RestErr) {
 	stmt, err := mysql.Client.Prepare(queryGetCartsByCustomerID)
 	if err != nil {
 		return nil, errors.NewErrInternalServer(err.Error())
 	}
 	defer stmt.Close()
 
-	result := stmt.QueryRow(customerID)
-	fmt.Println(result)
-	err = result.Scan(&cart.CustomerID, &cart.ProductID, &cart.CreatedAt, &cart.UpdatedAt)
+	rows, err := stmt.Query(customerID)
 	if err != nil {
-		return nil, mysql_util.ParseError(err)
+		return nil, errors.NewErrInternalServer(err.Error())
+	}
+	defer rows.Close()
+
+	results := make([]domain.Cart, 0)
+	for rows.Next() {
+		var cart domain.Cart
+		err = rows.Scan(&cart.CustomerID, &cart.ProductID, &cart.CreatedAt, &cart.UpdatedAt)
+		if err != nil {
+			return nil, errors.NewErrInternalServer(err.Error())
+		}
+		results = append(results, cart)
 	}
 
-	return &cart, nil
+	if len(results) == 0 {
+		return nil, errors.NewErrNotFound(fmt.Sprintf("No carts found"))
+	}
+
+	return results, nil
 }
 
 func Get(customerID int64, productID int64) (*domain.Cart, *errors.RestErr) {
@@ -61,6 +91,8 @@ func Create(cartParam domain.CreateCartParams) (*domain.Cart, *errors.RestErr) {
 		return nil, errors.NewErrInternalServer(err.Error())
 	}
 	defer stmt.Close()
+
+	stmt.Exec(&cartParam.CustomerID, &cartParam.ProductID, &cartParam.CreatedAt, &cartParam.UpdatedAt)
 
 	// queryRes, err := stmt.Exec(&cartParam.CustomerID, &cartParam.ProductID, &cartParam.CreatedAt, &cartParam.UpdatedAt)
 	// if err != nil {

@@ -29,7 +29,8 @@ func Get(c *gin.Context) {
 }
 
 func Create(c *gin.Context) {
-	var cartParam domain.CreateCartParams
+	var cartParam = domain.NewCart()
+	fmt.Println(cartParam)
 	err := c.ShouldBindJSON(&cartParam)
 	if err != nil {
 		fmt.Println(err)
@@ -37,7 +38,7 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	newCart, createErr := services.CreateCart(cartParam)
+	newCart, createErr := services.CreateCart(*cartParam)
 	if createErr != nil {
 		c.JSON(http.StatusInternalServerError, createErr)
 		return
