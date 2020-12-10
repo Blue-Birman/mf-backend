@@ -12,8 +12,6 @@ import (
 
 func Get(c *gin.Context) {
 	customerID, idErr := parser.ParseID(c.Param("customer_id"))
-	fmt.Println("Geet")
-	fmt.Println(customerID)
 	if idErr != nil {
 		c.JSON(idErr.Status, idErr)
 		return
@@ -30,7 +28,6 @@ func Get(c *gin.Context) {
 
 func Create(c *gin.Context) {
 	var cartParam = domain.NewCart()
-	fmt.Println(cartParam)
 	err := c.ShouldBindJSON(&cartParam)
 	if err != nil {
 		fmt.Println(err)

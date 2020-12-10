@@ -12,8 +12,6 @@ import (
 
 func Get(c *gin.Context) {
 	customerID, idErr := parser.ParseID(c.Param("customer_id"))
-	fmt.Println("Geet")
-	fmt.Println(customerID)
 	if idErr != nil {
 		c.JSON(idErr.Status, idErr)
 		return
@@ -30,7 +28,6 @@ func Get(c *gin.Context) {
 
 func Create(c *gin.Context) {
 	var wishlistParam = domain.NewWishlist()
-	fmt.Println(wishlistParam)
 	err := c.ShouldBindJSON(&wishlistParam)
 	if err != nil {
 		fmt.Println(err)

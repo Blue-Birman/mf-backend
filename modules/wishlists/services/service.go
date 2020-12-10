@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"time"
 
 	productDomain "github.com/rvalessandro/mf-backend/modules/products/domain"
@@ -12,7 +11,6 @@ import (
 
 func GetWishlistByCustomerID(customerID int64) ([]productDomain.Product, *errors.RestErr) {
 	wishlists, err := data.Find(customerID)
-	fmt.Println("masuk")
 	if err != nil {
 		return nil, err
 	}

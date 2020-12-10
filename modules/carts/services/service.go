@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/rvalessandro/mf-backend/modules/carts/data"
@@ -12,7 +11,6 @@ import (
 
 func GetCartByCustomerID(customerID int64) ([]productDomain.Product, *errors.RestErr) {
 	carts, err := data.Find(customerID)
-	fmt.Println("masuk")
 	if err != nil {
 		return nil, err
 	}

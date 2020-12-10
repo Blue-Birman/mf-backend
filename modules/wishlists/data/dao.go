@@ -22,24 +22,6 @@ const (
 	queryDeleteWishlist = `DELETE FROM wishlists WHERE customer_id=? AND product_id=?`
 )
 
-// func Find(customerID int64) (domain.Wishlist, *errors.RestErr) {
-// 	wishlist := domain.Wishlist{}
-// 	stmt, err := mysql.Client.Prepare(queryGetWishlistsByCustomerID)
-// 	if err != nil {
-// 		return nil, errors.NewErrInternalServer(err.Error())
-// 	}
-// 	defer stmt.Close()
-
-// 	result := stmt.QueryRow(customerID)
-// 	fmt.Println(result)
-// 	err = result.Scan(&wishlist.CustomerID, &wishlist.ProductID, &wishlist.CreatedAt, &wishlist.UpdatedAt)
-// 	if err != nil {
-// 		return nil, mysql_util.ParseError(err)
-// 	}
-
-// 	return &wishlist, nil
-// }
-
 func Find(customerID int64) ([]productDomain.Product, *errors.RestErr) {
 	stmt, err := mysql.Client.Prepare(queryGetWishlistsByCustomerID)
 	if err != nil {
@@ -66,7 +48,6 @@ func Find(customerID int64) ([]productDomain.Product, *errors.RestErr) {
 	products := make([]productDomain.Product, 0)
 	for _, transactionProduct := range results {
 		product, err := productDAO.Get(transactionProduct.ProductID)
-		fmt.Println(transactionProduct.ProductID)
 		if err != nil {
 			return nil, err
 		}

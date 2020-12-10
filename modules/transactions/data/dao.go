@@ -106,6 +106,7 @@ func Get(id int64) (*domain.Transaction, *errors.RestErr) {
 func Create(TransactionParam domain.CreateTransactionParams) (*domain.Transaction, *errors.RestErr) {
 	stmt, err := mysql.Client.Prepare(queryCreateTransaction)
 	if err != nil {
+		fmt.Println(err)
 		return nil, errors.NewErrInternalServer(err.Error())
 	}
 	defer stmt.Close()
