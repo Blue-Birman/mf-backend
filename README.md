@@ -13,35 +13,10 @@ Install the dependencies and devDependencies and start the server.
 
 #### With Cli:
 ```sh
-$ mysql_username=YOUR_USERNAME mysql_password=YOUR_PASSWORD mysql_host=localhost mysql_schema=YOUR_DB_NAME go run main.go
+$ docker-compose up -d
+$  docker run -p 8080:8080 --env DB_HOST=172.20.0.1 --network mf --name mf_backend b816ab28e8db
 ```
 
-#### With VSCode Debugger
-1. Create .vscode/launch.json file 
-```
-    {
-      // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-      "version": "0.2.0",
-      "configurations": [
-        {
-          "name": "Launch",
-          "type": "go",
-          "request": "launch",
-          "mode": "auto",
-          "program": "${workspaceFolder}",
-          "envFile": "${workspaceFolder}/.env",
-          "args": []
-        }
-      ]
-    }
-```
-2. Create .env file in project 
-```
-    mysql_username=YOUR_USERNAME
-    mysql_password=YOUR_PASSWORD
-    mysql_host=localhost
-    mysql_schema=YOUR_DB_NAME
-```
 3. Press F5 to run VSCode Debugger
 # Group Members
 

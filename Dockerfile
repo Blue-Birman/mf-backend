@@ -1,10 +1,10 @@
 FROM golang
 
-WORKDIR /build
+WORKDIR /src
 
-COPY . /build
+COPY ./src /src
 
-RUN go build
+RUN go build .
 
 EXPOSE 8080
 

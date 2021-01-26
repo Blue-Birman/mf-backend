@@ -8,26 +8,19 @@ import (
 	"os"
 )
 
-const (
-	mysqlUsersUsername = "mysql_username"
-	mysqlUsersPassword = "mysql_password"
-	mysqlUsersHost     = "mysql_host"
-	mysqlUsersSchema   = "mysql_schema"
-)
-
 var (
 	Client *sql.DB
 
-	username = os.Getenv(mysqlUsersUsername)
-	password = os.Getenv(mysqlUsersPassword)
-	host     = os.Getenv(mysqlUsersHost)
-	schema   = os.Getenv(mysqlUsersSchema)
+	host     = os.Getenv("DB_HOST")
+	username = "root"
+	password = "root"
+	database = "mf_backend"
 )
 
 func init() {
 	var err error
 	datasource := fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=true",
-		username, password, host, schema,
+		username, password, host, database,
 	)
 	Client, err = sql.Open("mysql", datasource)
 	if err != nil {

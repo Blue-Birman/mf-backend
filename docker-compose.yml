@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+  mf_database:
+    image: mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=mf_backend
+
+    ports:
+      - "3306:3306"

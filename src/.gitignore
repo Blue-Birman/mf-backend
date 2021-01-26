@@ -1,5 +1,5 @@
 /.vscode
 .env
 __debug_bin
-.idea
+../.idea
 mf-backend
