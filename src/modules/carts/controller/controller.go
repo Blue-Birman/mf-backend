@@ -5,10 +5,14 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rvalessandro/mf-backend/modules/carts/data"
 	"github.com/rvalessandro/mf-backend/modules/carts/domain"
 	"github.com/rvalessandro/mf-backend/modules/carts/services"
 	"github.com/rvalessandro/mf-backend/utils/parser"
 )
+
+var dao = data.CartDAO{}
+var service = services.CartService{DAO: dao}
 
 func Get(c *gin.Context) {
 	customerID, idErr := parser.ParseID(c.Param("customer_id"))
@@ -17,7 +21,7 @@ func Get(c *gin.Context) {
 		return
 	}
 
-	products, err := services.GetCartByCustomerID(customerID)
+	products, err := service.GetCartByCustomerID(customerID)
 	if err != nil {
 		c.JSON(err.Status, err)
 		return
@@ -27,7 +31,7 @@ func Get(c *gin.Context) {
 }
 
 func Create(c *gin.Context) {
-	var cartParam = domain.NewCart()
+	var cartParam = domain.NewCart() // menyiapkan objek cart
 	err := c.ShouldBindJSON(&cartParam)
 	if err != nil {
 		fmt.Println(err)
@@ -35,7 +39,7 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	newCart, createErr := services.CreateCart(*cartParam)
+	newCart, createErr := service.CreateCart(*cartParam)
 	if createErr != nil {
 		c.JSON(http.StatusInternalServerError, createErr)
 		return
@@ -58,7 +62,7 @@ func Delete(c *gin.Context) {
 	}
 
 	var product *domain.Cart
-	product, err = services.DeleteCart(customerID, productID)
+	product, err = service.DeleteCart(customerID, productID)
 	if err != nil {
 		c.JSON(err.Status, err)
 		return

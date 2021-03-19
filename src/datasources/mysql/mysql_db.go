@@ -3,9 +3,10 @@ package mysql
 import (
 	"database/sql"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
 	"log"
 	"os"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 var (
@@ -13,7 +14,7 @@ var (
 
 	host     = os.Getenv("DB_HOST")
 	username = "root"
-	password = "root"
+	password = ""
 	database = "mf_backend"
 )
 

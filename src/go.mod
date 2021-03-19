@@ -9,5 +9,6 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/mattn/go-shellwords v1.0.10 // indirect
 	github.com/rs/cors v1.7.0
+	github.com/stretchr/testify v1.7.0 // indirect
 	gopkg.in/urfave/cli.v1 v1.20.0 // indirect
 )

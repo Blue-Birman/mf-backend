@@ -9,7 +9,12 @@ import (
 	productDomain "github.com/rvalessandro/mf-backend/modules/products/domain"
 	"github.com/rvalessandro/mf-backend/utils/errors"
 	"github.com/rvalessandro/mf-backend/utils/mysql_util"
+	"github.com/stretchr/testify/mock"
 )
+
+type CartDAO struct {
+	Mock mock.Mock
+}
 
 const (
 	queryGetCart              = `SELECT customer_id, product_id, created_at, updated_at from carts where customer_id=? and product_id=?;`
@@ -22,7 +27,7 @@ const (
 	queryDeleteCart = `DELETE FROM carts WHERE customer_id=? AND product_id=?`
 )
 
-func Find(customerID int64) ([]productDomain.Product, *errors.RestErr) {
+func (dao CartDAO) Find(customerID int64) (*[]productDomain.Product, *errors.RestErr) {
 	stmt, err := mysql.Client.Prepare(queryGetCartsByCustomerID)
 	if err != nil {
 		return nil, errors.NewErrInternalServer(err.Error())
@@ -57,10 +62,10 @@ func Find(customerID int64) ([]productDomain.Product, *errors.RestErr) {
 		return nil, errors.NewErrNotFound(fmt.Sprintf("No carts found"))
 	}
 
-	return products, nil
+	return &products, nil
 }
 
-func Get(customerID int64, productID int64) (*domain.Cart, *errors.RestErr) {
+func (dao CartDAO) Get(customerID int64, productID int64) (*domain.Cart, *errors.RestErr) {
 	cart := domain.Cart{}
 	stmt, err := mysql.Client.Prepare(queryGetCart)
 	if err != nil {
@@ -77,7 +82,7 @@ func Get(customerID int64, productID int64) (*domain.Cart, *errors.RestErr) {
 	return &cart, nil
 }
 
-func Create(cartParam domain.CreateCartParams) (*domain.Cart, *errors.RestErr) {
+func (dao CartDAO) Create(cartParam domain.CreateCartParams) (*domain.Cart, *errors.RestErr) {
 	stmt, err := mysql.Client.Prepare(queryCreateCart)
 	if err != nil {
 		return nil, errors.NewErrInternalServer(err.Error())
@@ -86,10 +91,10 @@ func Create(cartParam domain.CreateCartParams) (*domain.Cart, *errors.RestErr) {
 
 	stmt.Exec(&cartParam.CustomerID, &cartParam.ProductID, &cartParam.CreatedAt, &cartParam.UpdatedAt)
 
-	return Get(cartParam.CustomerID, cartParam.ProductID)
+	return dao.Get(cartParam.CustomerID, cartParam.ProductID)
 }
 
-func Delete(customerID int64, productID int64) *errors.RestErr {
+func (dao CartDAO) Delete(customerID int64, productID int64) *errors.RestErr {
 	stmt, err := mysql.Client.Prepare(queryDeleteCart)
 	if err != nil {
 		return errors.NewErrInternalServer(err.Error())
