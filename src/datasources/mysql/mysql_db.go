@@ -14,7 +14,7 @@ var (
 
 	host     = os.Getenv("DB_HOST")
 	username = "root"
-	password = ""
+	password = "root"
 	database = "mf_backend"
 )
 

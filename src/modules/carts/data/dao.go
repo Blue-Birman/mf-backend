@@ -9,11 +9,16 @@ import (
 	productDomain "github.com/rvalessandro/mf-backend/modules/products/domain"
 	"github.com/rvalessandro/mf-backend/utils/errors"
 	"github.com/rvalessandro/mf-backend/utils/mysql_util"
-	"github.com/stretchr/testify/mock"
 )
 
+type CartDAOInterface interface {
+	Find(customerID int64) (*[]productDomain.Product, *errors.RestErr)
+	Get(customerID int64, productID int64) (*domain.Cart, *errors.RestErr)
+	Create(cartParam domain.CreateCartParams) (*domain.Cart, *errors.RestErr)
+	Delete(customerID int64, productID int64) *errors.RestErr
+}
+
 type CartDAO struct {
-	Mock mock.Mock
 }
 
 const (

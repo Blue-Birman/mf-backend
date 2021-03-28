@@ -1,4 +1,4 @@
-package test
+package testservice
 
 import (
 	"testing"
@@ -136,7 +136,7 @@ func TestCartService_DeleteCartInvalid(t *testing.T) {
 	// Memanggil method DeleteCart
 	_, err := cartService.DeleteCart(int64(-1), int64(-1))
 
-	// Pengecekan bahwa return sesuai dan tidak error
+	// Pengecekan bahwa return error
 	assert.NotNil(t, err)
 
 }

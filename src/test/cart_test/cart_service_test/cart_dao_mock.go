@@ -1,4 +1,4 @@
-package test
+package testservice
 
 import (
 	"github.com/rvalessandro/mf-backend/modules/carts/domain"
